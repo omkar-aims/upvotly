@@ -1,8 +1,6 @@
 import Alpine from "alpinejs";
 import sort from "@alpinejs/sort";
 
-import "./style.css";
-
 window.Alpine = Alpine;
 
 // APIS

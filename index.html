@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <title>Vite App</title>
+    <title>Upvotly | Dynamic Voting System</title>
   </head>
   <body class="bg-orange-50">
     <header>
@@ -136,36 +136,34 @@
 
     <!-- MODAL -->
 
-    <div
-      tabindex="-1"
-      class="overflow-y-auto bg-black/10 overflow-x-hidden backdrop-blur-2xl fixed inset-0 z-50 items-center w-full md:inset-0 max-h-full flex justify-center"
-      x-data
-      x-show="$store.modal.isOpen"
-      x-transition
-    >
-      <div class="relative p-4 w-full max-w-md max-h-full">
-        <div class="relative bg-orange-50 rounded-lg shadow-lg">
-          <div
-            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-b-orange-800"
-          >
-            <h3
-              class="text-lg font-semibold text-orange-800"
-              x-text="$store.modal.title"
-            ></h3>
-            <button
-              type="button"
-              class="bg-transparent cursor-pointer w-8 h-8 ms-auto inline-flex justify-center items-center text-orange-800 hover:bg-orange-800 hover:text-white transition-colors rounded"
-              x-data
-              @click="$store.modal.close()"
+    <template x-data x-transition x-if="$store.modal.isOpen">
+      <div
+        tabindex="-1"
+        class="overflow-y-auto bg-black/10 overflow-x-hidden backdrop-blur-2xl fixed inset-0 z-50 items-center w-full md:inset-0 max-h-full flex justify-center"
+      >
+        <div class="relative p-4 w-full max-w-md max-h-full">
+          <div class="relative bg-orange-50 rounded-lg shadow-lg">
+            <div
+              class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-b-orange-800"
             >
-              <ion-icon name="close-outline" class="text-2xl"></ion-icon>
-            </button>
-          </div>
+              <h3
+                class="text-lg font-semibold text-orange-800"
+                x-text="$store.modal.title"
+              ></h3>
+              <button
+                type="button"
+                class="bg-transparent cursor-pointer w-8 h-8 ms-auto inline-flex justify-center items-center text-orange-800 hover:bg-orange-800 hover:text-white transition-colors rounded"
+                x-data
+                @click="$store.modal.close()"
+              >
+                <ion-icon name="close-outline" class="text-2xl"></ion-icon>
+              </button>
+            </div>
 
-          <template x-if="$store.modal.type === 'add'">
-            <form
-              class="p-4 md:p-5"
-              x-data="{idea: {title: '', description: '', image: '', button: { label: '', url: ''}, votes: {up: 0, down: 0}, myVote: null}, addNewIdea() {
+            <template x-if="$store.modal.type === 'add'">
+              <form
+                class="p-4 md:p-5"
+                x-data="{idea: {title: '', description: '', image: '', button: { label: '', url: ''}, votes: {up: 0, down: 0}, myVote: null}, addNewIdea() {
               $store.ideas.add(this.idea);
               $store.modal.close(); 
               this.idea = {
@@ -178,204 +176,205 @@
               };
 
             }}"
-              @submit.prevent="addNewIdea()"
-            >
-              <div class="grid gap-4 mb-4 grid-cols-2">
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Title</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Title for the idea"
-                    required
-                    x-model="idea.title"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Description</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Description for the idea"
-                    required
-                    x-model="idea.description"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Image</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Image Link"
-                    required
-                    x-model="idea.image"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Button Label</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Enter the button label"
-                    required
-                    x-model="idea.button.label"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Button Link</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Enter the button Link"
-                    required
-                    x-model="idea.button.url"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                class="text-white inline-flex items-center bg-orange-800 hover:bg-orange-900 w-full py-2.5 justify-center rounded-lg uppercase font-bold cursor-pointer"
+                @submit.prevent="addNewIdea()"
               >
-                Add
-              </button>
-            </form>
-          </template>
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Title</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Title for the idea"
+                      required
+                      x-model="idea.title"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Description</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Description for the idea"
+                      required
+                      x-model="idea.description"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Image</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Image Link"
+                      required
+                      x-model="idea.image"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Button Label</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Enter the button label"
+                      required
+                      x-model="idea.button.label"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Button Link</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Enter the button Link"
+                      required
+                      x-model="idea.button.url"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="text-white inline-flex items-center bg-orange-800 hover:bg-orange-900 w-full py-2.5 justify-center rounded-lg uppercase font-bold cursor-pointer"
+                >
+                  Add
+                </button>
+              </form>
+            </template>
 
-          <template x-if="$store.modal.type === 'edit'">
-            <form
-              class="p-4 md:p-5"
-              x-data="{
+            <template x-if="$store.modal.type === 'edit'">
+              <form
+                class="p-4 md:p-5"
+                x-data="{
                 idea: JSON.parse(JSON.stringify($store.modal.idea)), 
                 updateIdea() {
                   $store.ideas.update($store.modal.idea.title, this.idea);
                   $store.modal.close();
                 }
               }"
-              @submit.prevent="updateIdea()"
-            >
-              <div class="grid gap-4 mb-4 grid-cols-2">
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Title</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Title for the idea"
-                    required
-                    x-model="idea.title"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Description</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Description for the idea"
-                    required
-                    x-model="idea.description"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Image</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Image Link"
-                    required
-                    x-model="idea.image"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Button Label</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Enter the button label"
-                    required
-                    x-model="idea.button.label"
-                  />
-                </div>
-                <div class="col-span-2">
-                  <label
-                    for="name"
-                    class="block mb-2 text-sm font-medium text-zinc-600"
-                    >Button Link</label
-                  >
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
-                    placeholder="Enter the button Link"
-                    required
-                    x-model="idea.button.url"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                class="text-white inline-flex items-center bg-orange-800 hover:bg-orange-900 w-full py-2.5 justify-center rounded-lg uppercase font-bold cursor-pointer"
+                @submit.prevent="updateIdea()"
               >
-                Update
-              </button>
-            </form>
-          </template>
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Title</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Title for the idea"
+                      required
+                      x-model="idea.title"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Description</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Description for the idea"
+                      required
+                      x-model="idea.description"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Image</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Image Link"
+                      required
+                      x-model="idea.image"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Button Label</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Enter the button label"
+                      required
+                      x-model="idea.button.label"
+                    />
+                  </div>
+                  <div class="col-span-2">
+                    <label
+                      for="name"
+                      class="block mb-2 text-sm font-medium text-zinc-600"
+                      >Button Link</label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="bg-gray-50 border border-orange-200 text-gray-900 text-sm rounded-lg w-full py-2.5 px-6 focus:outline-0 focus:ring-2 focus:ring-orange-700 ring-offset-1"
+                      placeholder="Enter the button Link"
+                      required
+                      x-model="idea.button.url"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="text-white inline-flex items-center bg-orange-800 hover:bg-orange-900 w-full py-2.5 justify-center rounded-lg uppercase font-bold cursor-pointer"
+                >
+                  Update
+                </button>
+              </form>
+            </template>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
 
     <script
       type="module"
@@ -385,6 +384,6 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.js" defer></script>
   </body>
 </html>
